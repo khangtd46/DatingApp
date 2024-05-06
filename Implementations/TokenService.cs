@@ -7,30 +7,30 @@ using System.Text;
 
 namespace DatingApp.Implementations
 {
-	public class TokenService : ITokenService
-	{
-		private readonly SymmetricSecurityKey _key;
+    public class TokenService : ITokenService
+    {
+        private readonly SymmetricSecurityKey _key;
         public TokenService(IConfiguration config)
         {
-			_key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])); //Lấy Secret Key để tạo token
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["TokenKey"])); //Lấy Secret Key để tạo token
 
-		}
+        }
         public string CreateToken(SystemUser user)
-		{
-			var claims = new List<Claim>(){
-				new Claim(JwtRegisteredClaimNames.NameId,user.UserName) //UserName sẽ đc mang theo trong token => check username từ token
+        {
+            var claims = new List<Claim>(){
+                new Claim(JwtRegisteredClaimNames.NameId,user.UserName) //UserName sẽ đc mang theo trong token => check username từ token
 			};
-			var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
-			var tokenDescriptor = new SecurityTokenDescriptor() //cấu hình các option của token
-			{
-				Subject = new ClaimsIdentity(claims),
-				Expires = DateTime.Now.AddDays(7),
-				SigningCredentials = creds
+            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
+            var tokenDescriptor = new SecurityTokenDescriptor() //cấu hình các option của token
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = creds
 
-			};
-			var tokenHandler = new JwtSecurityTokenHandler();
-			var token = tokenHandler.CreateToken(tokenDescriptor);
-			return tokenHandler.WriteToken(token);
-		}
-	}
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
+        }
+    }
 }

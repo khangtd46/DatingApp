@@ -5,8 +5,10 @@ namespace DatingApp.Interfaces
 {
 	public interface IUserRepository
 	{
-		List<SystemUser> Users();
-		SystemUser User(int id);
-		SystemUser CreateUser(CreateSystemUserDTO user);
+		Task<IEnumerable<SystemUser>> GetUsersAsync();
+        Task<SystemUser> GetUserByIdAsync(int id);
+        Task<SystemUser> GetUserByUserNameAsync(string userName);
+		void Update(SystemUser user);
+		Task<bool> SaveAllAsync();
 	}
 }
